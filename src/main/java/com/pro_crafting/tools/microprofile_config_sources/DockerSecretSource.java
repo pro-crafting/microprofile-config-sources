@@ -17,27 +17,30 @@ import java.util.stream.Stream;
  * The secrets must be located in /run/secrets/<secret-name> <br/>
  * The file name of the secret is used directly as name of the configuration value
  */
+// TODO: Logging using slf4j
 public class DockerSecretSource implements ConfigSource {
     public static final String DIRECTORY = "/run/secrets/";
 
     private Map<String, String> properties = new ConcurrentHashMap<>();
 
-    // TODO: Do not throw exception. This could force the application server into an undefined state
-    public DockerSecretSource() throws IOException {
+    public DockerSecretSource() {
         this(Paths.get(DIRECTORY));
     }
 
-    public DockerSecretSource(Path directory) throws IOException {
+    public DockerSecretSource(Path directory) {
         initializeProperties(directory);
     }
 
-    private void initializeProperties(Path directory) throws IOException {
+    private void initializeProperties(Path directory) {
         if (Files.notExists(directory)) {
             return;
         }
         try (Stream<Path> walk = Files.walk(directory)) {
             walk.filter(Files::isRegularFile)
                     .forEach(this::setProperty);
+        } catch (IOException e) {
+            // Not able to search in the file system, provide no values
+            return;
         }
     }
 

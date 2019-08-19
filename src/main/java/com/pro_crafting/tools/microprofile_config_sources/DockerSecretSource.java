@@ -13,8 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 /**
- * Config Source which reads configuration values from docker swarm secrets. <p>
- * The secrets must be located in /run/secrets/<secret-name> <p>
+ * Config Source which reads configuration values from docker swarm secrets. <br>
+ * The secrets must be located in /run/secrets/<secret-name> <br>
  * The file name of the secret is used directly as name of the configuration value
  */
 // TODO: Logging using slf4j
